@@ -1,23 +1,6 @@
 import pandas as pd
 import numpy as np
 import yfinance as yf
-
-from numpy import mean, absolute
-from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import roc_curve, roc_auc_score, auc, accuracy_score, mean_squared_error, mean_absolute_error
-from sklearn.utils import resample
-from sklearn.base import BaseEstimator, TransformerMixin
-import matplotlib.pyplot as plt
-import plotly.graph_objects as go
-from plotly.subplots import make_subplots
-from statsmodels.tsa.stattools import pacf, acf
-from numpy_ext import rolling_apply as rolling_apply_ext
-from datetime import datetime, timedelta  
-from time import sleep
-import requests
-import time
-import math
-import sys
 import warnings
 warnings.filterwarnings("ignore")
 
@@ -81,6 +64,8 @@ def moving_median(data, window):
     
     return data.rolling(window).median()
 
+#TODO: Variações -1, -5, -20
+#TODO: Time Features: % da semana, % do mês, % do trimestre % do ano
 
 # Oscilators
 def rolling_z_score(data, window):
@@ -181,7 +166,7 @@ def rsi(data, window = 15):
     return df_rsi['rsi']
 
 
-# Candle Patterns
+# Candles Patterns
 def candle_proportions(open, high, low, close):
     """Method to calculate proportion of the candle's body and shadows.
 
@@ -236,14 +221,19 @@ def sequence_counter(data):
     # Cumulative count to calculate each sequence (starting by 1)
     return (grouped_values.cumcount())+1
 
-# TODO
-# Candle Color
-# https://conteudos.xpi.com.br/aprenda-a-investir/relatorios/candlestick/
-# https://artigos.toroinvestimentos.com.br/trading/padroes-de-candlestick
+def candle_color(open, close):
+    """Method to get the candle color.
 
-# Chart Patterns
+    Args:
+        open, close (Series): Input data from candle.
+    
+    Returns:
+        color (Int): {1:Green, -1:Red}.
+    """
+    
+    return np.where(close > open, 1, -1)
+
 # TODO
-# Afunilamentos
 # Resistencias complexas e rompimentos (Tipo MVST)
-# https://www.earn2trade.com/blog/pt/padroes-graficos/
-# https://blog.nelogica.com.br/tudo-o-que-voce-precisa-saber-sobre-padroes-graficos/
+# Classe de execução de Backtest
+# Classe que ajuda na criação de features (Passa um dicionário com features e parametros)
